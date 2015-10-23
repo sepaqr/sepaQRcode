@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Demo for sepaQR</title>
+  <style type="text/css">
+    body {
+      margin-left: 2%;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Here comes the sepaqr glory ;-) </h1>
+  <div id="qrcode"></div>
+  <div>
+    <h2>Details</h2>
+    <pre id="qrcodecontent"></pre>
+  </div>
+</body>
+<!-- bower:js -->
+<!-- endbower -->
+<!--<script src="./dist/sepaqr.js"></script>-->
+<script src="./src/qrcode-patched.js"></script>
+<script src="./src/sepaqr.js"></script>
+<script type="text/javascript">
+  var sepaqr = new sepaQR({
+    benefName: 'Franz Mustermänn',
+    benefBIC: 'BHBLDEHHXXX',
+    benefAccNr: 'DE71110220330123456789',
+    amountEuro: 12.34,
+    purpose: 'GDDS',
+    creditorRef: 'RF18539007547034'
+  });
+
+  var sepaqr1 = new sepaQR({
+    charset: sepaQR.Charset.UTF_8,
+    version: '001',
+    benefName: 'Purjehdusseura Bitti ja Paatti Segelsallskapet Bit och Bat juhlat os.1',
+    benefBIC: 'NDEAFIHH',
+    benefAccNr: 'FI7331313001000058',
+    amountEuro: 1234.99,
+    purpose: 'BEXP',
+    creditorRef: '',
+    remittanceInf: '140charactersoffreetext140charactersoffreetext140charactersoffreetext140charactersoffreetext140charactersoffreetext140charactersoffreetext14',
+    information: 'ReqdExctnDt/2014-01-02 pushing to the last very Z limitä'
+  });
+  sepaqr1.valid();
+
+  var code = sepaqr1.makeCodeInto("qrcode");
+  if (!!code) {
+    var elem = document.getElementById("qrcodecontent");
+    elem.innerHTML = sepaqr1.toQRText() + "\n\n-- Stats\nlength (chars):" + sepaqr1.toQRText().length + "\nModule Count (max. 69!): " + sepaqr1.qrcode._oQRCode.moduleCount;
+  }
+</script>
+
+</html>

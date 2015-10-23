@@ -1,0 +1,20 @@
+{
+  "name": "sepaqr",
+  "description": "Library to create QRcodes that include SEPA-Credit-Transfer information like Beneficiary Account(IBAN) and BIC",
+  "main": "",
+  "authors": [
+    "@kralo - github"
+  ],
+  "license": "MIT",
+  "homepage": "http://sepaqr.eu",
+  "moduleType": [
+    "amd"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -586,8 +586,7 @@ var QRCodep;
 })();
 
 //module.exports = QRCodep;
-;'use strict';
-/**
+;/**
  * @fileoverview
  *
  * @author kralo
@@ -595,10 +594,11 @@ var QRCodep;
 var sepaQR;
 
 (function() {
+  'use strict';
   //---------------------------------------------------------------------
   // SepaQR for JavaScript
   //
-  // Copyright (c) 2015 Max Schulze
+  // Copyright (c) 2015-2016 Max Schulze
   //
   // URL: http://sepaqr.eu
   //
@@ -683,7 +683,7 @@ var sepaQR;
     if (typeof this._sOpt.amountEuro == "string") {
       return (this._sOpt.amountEuro.length === 0);
     } else if (typeof this._sOpt.amountEuro == "number") {
-      this._sOpt.amountEuro = Math.round(this._sOpt.amountEuro * 100) / 100
+      this._sOpt.amountEuro = Math.round(this._sOpt.amountEuro * 100) / 100;
         // the limit of 999999999.99 is directly from the spec!
       var valid = (this._sOpt.amountEuro > 0.01) && (this._sOpt.amountEuro <= 999999999.99);
       if (!valid) {
@@ -694,7 +694,11 @@ var sepaQR;
   };
 
   sepaQR.prototype.validBenefBic = function() {
-    var valid = (typeof this._sOpt.benefBIC == "string") && (this._sOpt.benefBIC.length >= 0) && (this._sOpt.benefBIC.length <= 11);
+    var valid = (this._sOpt.version == "002") || (typeof this._sOpt.benefBIC == "string") && (this._sOpt.benefBIC.length >= 0) && (this._sOpt.benefBIC.length <= 11);
+    if (!valid) {
+      throw new Error("BIC is mandatory in Version 001!");
+    }
+    valid = (typeof this._sOpt.benefBIC == "string") && (this._sOpt.benefBIC.length >= 0) && (this._sOpt.benefBIC.length <= 11);
     if (!valid) {
       throw new Error("benefBIC not valid!");
     }
@@ -750,7 +754,7 @@ var sepaQR;
 
     }
     return (bytecounter <= 328); // originally <=331 bytes, but library seems to do some sort of padding
-  }
+  };
 
   sepaQR.prototype.valid = function() {
     var valid = (this.validServiceTag() && this.validVersion() && this.validCharset() && this.validIdentificationCode() && this.validBenefName() && this.validBenefAccNr() &&
@@ -782,7 +786,6 @@ var sepaQR;
     return this.prepareQRText();
   };
 
-
   sepaQR.prototype.makeCodeInto = function(elem, vOptions) {
     var options = {
       width: 256,
@@ -810,7 +813,7 @@ var sepaQR;
     // -- Draw explanatory link around
     var rectLineWidth = 3; // px
     var rectRadius = 12; // px
-    var codeRectDist = 8 // px, >> sqrt(2)*RectRadius
+    var codeRectDist = 8; // px, >> sqrt(2)*RectRadius
     var RectBorderDist = 6; //px
     var myCanvas = canvas;
 
@@ -837,7 +840,7 @@ var sepaQR;
       this.arcTo(x, y, x + w, y, r);
       //this.closePath();
       return this;
-    }
+    };
 
     var context = myCanvas.getContext('2d');
     context.fillStyle = 'white';

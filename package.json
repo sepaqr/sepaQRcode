@@ -1,11 +1,11 @@
 {
   "author": "@kralo - github",
   "name": "sepaqr",
-  "version": "0.9",
+  "version": "0.91.0",
   "homepage": "http://sepaqr.eu",
   "repository": {
     "type": "git",
-    "url": "git@github.com:kralo/sepaQRcode.git"
+    "url": "https://github.com/sepaqr/sepaQRcode.git"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

@@ -159,7 +159,7 @@ describe("testing with single properties", function() {
 
 });
 
-describe("the epc demonstrator qrcode from the spec", function() {
+describe("the epc demonstrator qrcode from the spec (v1)", function() {
   var sepaqr = new sepaQR({
     charset: sepaQR.Charset.UTF_8,
     version: '001',
@@ -203,7 +203,57 @@ describe("the epc demonstrator qrcode from the spec", function() {
   });
 
   it("should have the same payload length", function() {
-    expect(sepaqr.toQRText().length).toBe(95);
+    expect(sepaqr.toQRText().length).toBe(95); // String 95, utf-bytes 96
+  });
+
+});
+
+describe("the epc demonstrator qrcode from the spec (v2)", function() {
+  var sepaqr = new sepaQR({
+    charset: sepaQR.Charset.ISO8859_1,
+    version: '002',
+    benefName: 'François D\'Alsace S.A.',
+    benefBIC: '',
+    benefAccNr: 'FR1420041010050500013M02606',
+    amountEuro: 12.3,
+    purpose: '',
+    creditorRef: '',
+    remittanceInf : 'Client:Marie Louise La Lune',
+    information: ''
+  });
+
+  it("should be a valid Beneficiary", function() {
+    expect(sepaqr.validBenefName()).toBe(true);
+    expect(sepaqr.validBenefBic()).toBe(true);
+    expect(sepaqr.validBenefAccNr()).toBe(true);
+  });
+
+  it("should be a valid Amount", function() {
+    expect(sepaqr.validAmountEuro()).toBe(true);
+  });
+
+  it("should be a valid purpose", function() {
+    expect(sepaqr.validPurpose()).toBe(true);
+  });
+
+  it("should be a valid CredRef", function() {
+    expect(sepaqr.validCreditorRefOrRemittance()).toBe(true);
+  });
+
+  it("should be a valid info", function() {
+    expect(sepaqr.validInformation()).toBe(true);
+  });
+
+  it("should be a valid payload", function() {
+    expect(sepaqr.valid()).toBe(true);
+  });
+
+  it("should yield the same text as in the spec", function() {
+    expect(sepaqr.toQRText()).toBe('BCD\n002\n2\nSCT\n\nFrançois D\'Alsace S.A.\nFR1420041010050500013M02606\nEUR12.3\n\n\nClient:Marie Louise La Lune');
+  });
+
+  it("should have the same payload length", function() {
+    expect(sepaqr.toQRText().length).toBe(103);
   });
 
 });
@@ -232,6 +282,25 @@ describe("the finnish demonstrator qrcode from the spec", function() {
     expect(sepaqr.toQRText()).toBe('BCD\n001\n1\nSCT\nNDEAFIHH\nPurjehdusseura Bitti ja Paatti Segelsällskapet Bit och Båt juhlat os.1\nFI7331313001000058\nEUR999999999.99\nBEXP\n\n140charactersoffreetext140charactersoffreetext140charactersoffreetext140charactersoffreetext140charactersoffreetext140charactersoffreetext14\nReqdExctnDt/2014-01-02');
   });
 
+});
+
+describe("checking mandatory BIC in Ver 001", function() { // less characters, but counting after utf-8 conversion
+  var sepaqr1 = new sepaQR({
+    charset: sepaQR.Charset.UTF_8,
+    version: '001',
+    benefName: 'Purjehdusseura Bitti ja Paatti Segelsällskapet Bit och Båt juhlat os.1',
+    benefBIC: '',
+    benefAccNr: 'FI7331313001000058',
+    amountEuro: 1234.99,
+    purpose: 'BEXP',
+    creditorRef: '',
+    remittanceInf: 'freetext',
+    information: ''
+  });
+
+  it("missing BIC is an error", function() {
+    expect(sepaqr1.validBenefBic()).toBe(true);
+  });
 });
 
 describe("checking the maximum length in bytes", function() { // less characters, but counting after utf-8 conversion

@@ -97,7 +97,7 @@ var sepaQR;
     } else if (typeof this._sOpt.amountEuro == "number") {
       this._sOpt.amountEuro = Math.round(this._sOpt.amountEuro * 100) / 100;
         // the limit of 999999999.99 is directly from the spec!
-      var valid = (this._sOpt.amountEuro > 0.01) && (this._sOpt.amountEuro <= 999999999.99);
+      var valid = (this._sOpt.amountEuro >= 0.01) && (this._sOpt.amountEuro <= 999999999.99);
       if (!valid) {
         throw new Error("Amount not valid!");
       }
